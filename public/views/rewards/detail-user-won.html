@@ -1,0 +1,186 @@
+<div ng-controller="detailUserWonController">
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header">
+				<i class="fa fa-gift"></i> Rewards
+			</h1>
+		</div><!-- /.col-lg-12 -->
+	</div><!-- /.row -->
+
+	<ul class="nav nav-tabs bootstrapTabs" role="tablist">
+		<li class="active">
+			<a href="#/#user-detail">
+				<i class="fa fa-list fa-lg"></i> Information
+			</a>
+		</li>
+		<li>
+			<a href="#/#attended-history">
+				<i class="fa fa-history fa-lg"></i> Attened History
+			</a>
+		</li>
+	</ul>
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="tab-content">
+				<div id="user-detail" class="tab-pane active">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4><i class="fa fa-edit"></i> Edit user - <small>ID : {{ user.userId }}</small></h4>
+						</div>
+
+						<div class="panel-body">
+							<!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+							<form class="form-horizontal" name="form" ng-submit="submitForm()" novalidate>
+								<!-- NICKNAME
+								================================================================================ -->
+
+								<div class="form-group">
+									<label class="control-label col-md-3" for="input-nickname">Nickname :</label>
+
+									<div class="col-md-6">
+										<input type="text" name="nickname" class="form-control" id="input-nickname" ng-model="user.nickname"
+											   validator="[required, requiredBlur, notHaveSpecialChars]">
+									</div>
+								</div>
+
+
+								<!-- EMAIL
+								================================================================================ -->
+
+								<div class="form-group">
+									<label class="control-label col-md-3" for="input-email">Email :</label>
+
+									<div class="col-md-6">
+										<input type="email" name="email" class="form-control" id="input-email" ng-model="user.email"
+											   validator="[email]">
+									</div>
+								</div>
+
+
+								<!-- REALNAME
+								================================================================================ -->
+
+								<div class="form-group">
+									<label class="control-label col-md-3" for="input-realname">Real Name :</label>
+
+									<div class="col-md-6">
+										<input type="text" name="realname" class="form-control" id="input-realname" ng-model="user.realname"
+											   validator="[required, requiredBlur, notHaveSpecialChars]">
+									</div>
+								</div>
+
+
+								<!-- ADDRESS
+								================================================================================ -->
+
+								<div class="form-group">
+									<label class="control-label col-md-3" for="input-address">Address :</label>
+
+									<div class="col-md-6">
+										<textarea name="address" class="form-control"a id="input-address" ng-model="user.address" rows="5"
+												  validator="[required, requiredBlur, notHaveSpecialChars]">
+										</textarea>
+									</div>
+								</div>
+
+
+								<!-- PHONE NUMBER
+								================================================================================ -->
+
+								<div class="form-group">
+									<label class="control-label col-md-3" for="input-phone">Phone :</label>
+									<div class="col-md-3">
+										<input type="text" name="phone" class="form-control" id="input-phone" ng-model="user.phone"
+											   validator="[required, requiredBlur, number]">
+									</div>
+								</div>
+
+
+								<!-- WIN OR LOSE
+								================================================================================ -->
+
+								<div class="form-group">
+									<label class="control-label col-md-3">Win :</label>
+
+									<div class="col-md-6">
+										<i ng-class="user.winOrLose | checkmark"></i>
+									</div>
+								</div>
+
+
+								<!-- REWARD ID [ READ ONLY ]
+								================================================================================ -->
+
+								<div class="form-group">
+									<label class="control-label col-md-3">Reward ID :</label>
+
+									<div class="col-md-3">
+										<input type="text" class="form-control" ng-model="user.rewardId" disabled>
+									</div>
+								</div>
+
+
+								<!-- REWARD TITLE [ READ ONLY ]
+								================================================================================ -->
+
+								<div class="form-group">
+									<label class="control-label col-md-3">Reward Title :</label>
+
+									<div class="col-md-3">
+										<input type="text" class="form-control" ng-model="user.rewardTitle" disabled>
+									</div>
+								</div>
+
+
+								<!-- IS REWARD DELIVERED
+								================================================================================ -->
+
+								<div class="form-group">
+									<label class="control-label col-md-3">Reward Delivered :</label>
+
+									<div class="col-md-6">
+										<div class="form-inline">
+											<label class="radio inline">
+												<input type="radio" name="isRewardDelivered" value="1" ng-model="user.isRewardDelivered" />
+												Yes
+											</label>
+											<label class="radio inline">
+												<input type="radio" name="isRewardDelivered" value="0" ng-model="user.isRewardDelivered" />
+												No
+											</label>
+										</div>
+									</div>
+								</div>
+
+
+								<!-- BUTTONS
+								================================================================================ -->
+
+								<div class="form-group">
+									<div class="col-md-offset-3 col-md-6">
+										<button type="button" class="btn btn-danger" ng-click="back()">
+											<i class="fa fa-caret-left"></i> Back
+										</button>
+
+										<button type="submit" class="btn btn-success">
+											Save <i class="fa fa-check"></i>
+										</button>
+
+										<div class="alert alert-danger server-message" ng-show="errorMessage.length > 0">
+											<i class="fa fa-times-circle"></i> {{ errorMessage }}
+										</div>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div><!-- ./tab-pane -->
+
+				<div id="attended-history" class="tab-pane">
+					<dn-table settings="attendedHistoryDataTable"></dn-table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,316 @@
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			<i class="fa fa-gift"></i> Rewards
+		</h1>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+<div class="alert alert-success server-message" ng-show="successMessage.length > 0">
+	<i class="fa fa-check-circle-o fa-lg fa-fw"></i> {{ successMessage }} <br>
+	<span ng-show="apnMessage.length > 0 || gcmMessage.length > 0">
+		<i class="fa fa-mobile fa-lg fa-fw"></i> {{ apnMessage }}{{ gcmMessage }} <br>
+	</span>
+	<span ng-show="mailMessage.length > 0">
+		<i class="fa fa-envelope fa-lg fa-fw"></i> {{ mailMessage }}
+	</span>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<ul class="nav nav-tabs bootstrapTabs" role="tablist">
+			<li ng-class="{ active : activeTabId == 'reward-detail' }">
+				<a href="#/#reward-detail">
+					<i class="fa fa-list fa-lg"></i> Information
+				</a>
+			</li>
+			<li ng-class="{ active : activeTabId == 'list-users-attended' }">
+				<a href="#/#list-users-attended">
+					<i class="fa fa-users fa-lg"></i> Users Attended
+				</a>
+			</li>
+			<li ng-class="{ active : activeTabId == 'list-users-won' }">
+				<a href="#/#list-users-won">
+					<i class="fa fa-trophy fa-lg"></i> Users Won
+				</a>
+			</li>
+		</ul>
+
+		<div class="tab-content">
+			<div id="reward-detail" class="tab-pane" ng-class="{ active : activeTabId == 'reward-detail' }">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4><i class="fa fa-edit"></i> Edit reward - <small>ID : {{ reward.rewardId }}</small></h4>
+					</div>
+
+					<div class="panel-body">
+						<!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+						<form class="form-horizontal" name="form" ng-submit="submitForm()" novalidate>
+
+							<!-- REWARD TITLE
+							================================================================================ -->
+
+							<div class="form-group">
+								<label class="control-label col-md-3" for="input-reward-title">Title :</label>
+
+								<div class="col-md-6">
+									<input type="text" name="rewardTitle" class="form-control" id="input-reward-title" ng-model="reward.rewardTitle"
+										   validator="[required, requiredBlur, notHaveSpecialChars]">
+								</div>
+							</div>
+
+
+							<!-- REWARD THUMBNAIL URL
+							================================================================================ -->
+
+							<!-- TODO : Upload thumbnail image here -->
+							<div class="form-group">
+								<label class="control-label col-md-3" for="input-reward-thumb">Thumbnail URL :</label>
+
+								<div class="col-md-6">
+									<div class="input-group">
+										<input type="text" name="rewardThumb" class="form-control" id="input-reward-thumb" disabled ng-model="reward.rewardThumb">
+
+										<span class="input-group-btn">
+											<div class="btn btn-warning input-upload-wrapper">
+												Change Image  <i class="fa fa-upload"></i>
+												<input type="file" class="input-upload" nv-file-select="" uploader="uploader">
+											</div>
+										</span>
+									</div>
+
+									<label class="label label-danger" ng-show="uploadMessage.length > 0">
+										{{ uploadMessage }}
+									</label>
+								</div>
+							</div>
+
+
+							<!-- REWARD THUMBNAIL PREVIEW
+							================================================================================ -->
+
+							<div class="form-group" ng-show="reward.rewardThumb">
+								<label class="control-label col-md-3">Thumbnail Preview :</label>
+
+								<div class="col-md-6">
+									<img class="img-thumbnail" ng-src="{{ reward.rewardThumb }}" alt="" >
+								</div>
+							</div>
+
+
+							<!-- REWARD DESCRIPTION
+							================================================================================ -->
+
+							<div class="form-group">
+								<label class="control-label col-md-3" for="input-reward-description">Description :</label>
+
+								<div class="col-md-6">
+									<textarea name="rewardDescription" class="form-control" id="input-reward-description" ng-model="reward.rewardDescription" rows="10"
+											  validator="[required, requiredBlur]">
+									</textarea>
+								</div>
+							</div>
+
+
+							<!-- CREATED DATE
+							================================================================================ -->
+
+							<div class="form-group">
+								<label class="control-label col-md-3" for="date-created">Create Date :</label>
+
+								<div class="col-md-3">
+									<div class="input-group date jq-date-picker">
+										<input id="date-created" name="dateCreated" type="text" class="form-control" ng-model="reward.dateCreated"
+											   validator="[required, requiredBlur, dateBefore]"
+											   validator-date-before="{{ reward.dateEndOfAttending }}"
+											   validator-date-before-message="Created Date must be before Deadline Date.">
+										<span class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</span>
+									</div>
+								</div>
+							</div>
+
+
+							<!-- DEADLINE REGISTER
+							================================================================================ -->
+
+							<div class="form-group">
+								<label class="control-label col-md-3" for="date-end-of-attending">Deadline :</label>
+
+								<div class="col-md-3">
+									<div class="input-group date jq-date-picker">
+										<input id="date-end-of-attending" name="dateEndOfAttending" type="text" class="form-control" ng-model="reward.dateEndOfAttending"
+											   validator="[required, requiredBlur, dateBefore, dateAfter]"
+											   validator-date-before="{{ reward.dateSweepstakes }}"
+											   validator-date-before-message="Deadline Date must be before Sweepstakes Date."
+											   validator-date-after="{{ reward.dateCreated }}"
+											   validator-date-after-message="Deadline Date must be after Created Date.">
+										<span class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</span>
+									</div>
+								</div>
+							</div>
+
+
+							<!-- SWEEPSTAKES DATE
+							================================================================================ -->
+
+							<div class="form-group">
+								<label class="control-label col-md-3" for="date-sweepstakes">Sweepstakes Date :</label>
+
+								<div class="col-md-3">
+									<div class="input-group date jq-date-picker">
+										<input id="date-sweepstakes" type="text" class="form-control" ng-model="reward.dateSweepstakes"
+											   validator="[required, requiredBlur, dateAfter]"
+											   validator-date-after="{{ reward.dateEndOfAttending }}"
+											   validator-date-after-message="Sweepstakes Date must be after Deadline Date.">
+										<span class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</span>
+									</div>
+								</div>
+							</div>
+
+
+							<!-- REWARD QUANTITY
+							================================================================================ -->
+
+							<div class="form-group">
+								<label class="control-label col-md-3" for="input-reward-quantity">Quantity :</label>
+
+								<div class="col-md-3">
+									<input type="text" name="quantity" class="form-control" id="input-reward-quantity" placeholder="" ng-model="reward.quantity"
+										   validator="[required, requiredBlur, number]">
+								</div>
+							</div>
+
+
+							<!-- REWARD TYPE
+							================================================================================ -->
+
+							<div class="form-group">
+								<label class="control-label col-md-3">Reward type :</label>
+
+								<div class="col-md-3">
+									<div class="form-inline">
+										<label class="radio inline">
+											<input type="radio" name="rewardsType" value="0" ng-model="reward.isPremium"> Normal
+										</label>
+
+										<label class="radio inline">
+											<input type="radio" name="rewardsType" value="1" ng-model="reward.isPremium"> Premium
+										</label>
+									</div>
+								</div>
+							</div>
+
+
+							<!-- BUTTONS
+							================================================================================ -->
+
+							<div class="form-group">
+								<div class="col-xs-offset-3 col-md-6">
+									<button type="button" class="btn btn-danger" ng-click="back()">
+										<i class="fa fa-caret-left"></i> Back
+									</button>
+
+									<!-- SUBMIT BUTTON -->
+									<button type="submit" class="btn btn-success">
+										Save <i class="fa fa-check"></i>
+									</button>
+
+									<!-- UPLOAD REWARD INFO BUTTON -->
+									<div class="btn btn-warning input-upload-wrapper" ng-click="initUploader()">
+										Upload Reward CSV  <i class="fa fa-upload"></i>
+										<input type="file" class="input-upload" nv-file-select uploader="uploaderRewardInfo">
+									</div>
+
+									<div class="alert server-message" ng-class="{ 'alert-danger' : rewardInfoUploadStatus == 'error', 'alert-success' : rewardInfoUploadStatus == 'success' }" ng-show="rewardInfoMessage.length > 0">
+										<i class="fa" ng-class="{ 'fa-times-circle' : rewardInfoUploadStatus == 'error', 'fa-check-circle' : rewardInfoUploadStatus == 'success' }"></i> {{ rewardInfoMessage }}
+									</div>
+
+									<div class="alert alert-danger server-message" ng-show="errorMessage.length > 0">
+										<i class="fa fa-times-circle"></i> {{ errorMessage }}
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- LIST USERS ATTENDED IN THIS REWARD
+			================================================================================ -->
+
+			<div id="list-users-attended" class="tab-pane" ng-class="{ active : activeTabId == 'list-users-attended' }">
+				<dn-table settings="usersAttendedDataTable"></dn-table>
+			</div>
+
+
+
+			<!-- LIST USERS WON THIS REWARD
+			================================================================================ -->
+
+			<div id="list-users-won" class="tab-pane" ng-class="{ active : activeTabId == 'list-users-won' }">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4><i class="fa fa-filter"></i> Filter : <small>ID : {{ reward.rewardId }}</small></h4>
+					</div>
+
+					<div class="panel-body">
+
+						<form class="form-horizontal" name="form" ng-submit="submitFormFilter()" novalidate>
+							<!-- REWARD TYPE
+							================================================================================ -->
+
+							<div class="form-group">
+								<label class="control-label col-md-2">Is reward delivered : </label>
+
+								<div class="col-md-9">
+									<div class="form-inline">
+										<label class="radio inline">
+											<input type="radio" name="isRewardDelivered" value="2" ng-model="usersWonParameters.isRewardDelivered" />
+											All
+										</label>
+										<label class="radio inline">
+											<input type="radio" name="isRewardDelivered" value="1" ng-model="usersWonParameters.isRewardDelivered" />
+											Yes
+										</label>
+										<label class="radio inline">
+											<input type="radio" name="isRewardDelivered" value="0" ng-model="usersWonParameters.isRewardDelivered" />
+											No
+										</label>
+									</div>
+								</div>
+							</div>
+
+
+							<!-- BUTTONS
+							================================================================================ -->
+
+							<div class="form-group">
+								<div class="col-md-offset-2 col-md-6">
+									<!-- SUBMIT BUTTON -->
+									<button type="submit" class="btn btn-success">
+										Search
+										<i class="fa fa-search"></i>
+									</button>
+
+									<div class="alert alert-danger server-message" ng-show="errorMessage.length > 0">
+										<i class="fa fa-times-circle"></i> {{ errorMessage }}
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+
+				<dn-table settings="usersWonDataTable"></dn-table>
+			</div>
+		</div>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->

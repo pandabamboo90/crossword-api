@@ -1,0 +1,71 @@
+<div class="panel panel-primary cw-generator-panel">
+	<div class="panel-heading">
+		<h4>
+			<span class="fa fa-th"></span> Crossword edit
+		</h4>
+	</div>
+	<div class="panel-body">
+		<div class="table-responsive">
+			<table class="table cw-generator-table">
+				<thead>
+					<tr>
+						<th class="col-index">#</th>
+						<th class="col-words">Words</th>
+						<th class="col-suggestions">Suggestions</th>
+						<th class="col-action"></th>
+					</tr>
+				</thead>
+				<tbody>
+
+					<tr ng-repeat="row in rows" ng-keyup="row.onKeyUp($event)">
+						<td>
+							{{ $index + 1 }}
+						</td>
+						<td>
+							<input type="text" class="form-control questions" ng-model="row.answers" ng-disabled="!api.cwEditable">
+						</td>
+						<td>
+							<input type="text" class="form-control answers" ng-model="row.questions" ng-disabled="!api.cwEditable">
+						</td>
+						<td>
+							<i class="fa fa-minus-circle fa-2x text-danger pointer" ng-click="removeRow(row, $index)"></i>
+						</td>
+					</tr>
+					<tr class="no-border" ng-hide="!api.cwEditable">
+						<td></td>
+						<td colspan="2">
+							<button type="button" class="btn btn-info" ng-click="generateCrossword()">
+								Make Crosswords <i class="fa fa-magic"></i>
+							</button>
+							<div class="btn btn-warning input-upload-wrapper">
+								Upload CSV <i class="fa fa-upload"></i>
+								<input type="file" class="input-upload" nv-file-select="" uploader="uploader">
+							</div>
+							<div class="uploader-progess" ng-show="uploader.isUploading || isUploaded">
+								<label class="label label-info" ng-show="uploader.isUploading">
+									<i class="fa fa-spin fa-spinner"></i> Uploading ...
+								</label>
+								<label class="label label-success" ng-show="isUploaded">
+									Upload finished ! <i class="fa fa-check"></i>
+								</label>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					<tr ng-show="cwMessage.length > 0" class="no-border">
+						<td></td>
+						<td colspan="2">
+							<label class="label label-danger">
+								{{ cwMessage }}
+							</label>
+						</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="cw-generator-preview"></div>
+		</div>
+	</div>
+</div>
+

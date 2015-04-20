@@ -1,0 +1,173 @@
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			<i class="fa fa-gamepad"></i> Games
+		</h1>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+
+<div class="row">
+	<div class="col-lg-12">
+		<div ng-include="'templates/game-already-public.html'" ng-show="alreadyPublic"></div>
+		<div ng-include="'templates/game-form-submit-invalid.html'" ng-show="!cwValid && !isCrosswordChanged && form.submitted"></div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4><i class="fa fa-edit"></i> Edit game</h4>
+			</div>
+			<div class="panel-body">
+				<!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+				<form class="form-horizontal" name="form" ng-submit="submitForm()" novalidate>
+
+					<!-- GAME TITLE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-game-title">Title :</label>
+
+						<div class="col-md-6">
+							<input type="text" name="gameTitle" class="form-control" id="input-game-title" ng-model="game.gameTitle" ng-disabled="alreadyPublic"
+								   validator="[required, requiredBlur, notHaveSpecialChars]">
+						</div>
+					</div>
+
+
+					<!-- CREATED DATE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="date-created">Create Date :</label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input id="date-created" name="dateCreated" type="text" class="form-control" ng-model="game.dateCreated" ng-disabled="alreadyPublic"
+									   validator="[required, requiredBlur]">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- GAME TYPE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Games Type</label>
+
+						<div class="col-md-9">
+							<div class="form-inline">
+								<label class="radio inline">
+									<input type="radio" name="gamesType" value="0" ng-model="game.isPremium" ng-disabled="alreadyPublic" />
+									Normal
+								</label>
+								<label class="radio inline">
+									<input type="radio" name="gamesType" value="1" ng-model="game.isPremium" ng-disabled="alreadyPublic" />
+									Premium
+								</label>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- REWARD SELECT [ ONLY FOR PREMIUM GAME ]
+					================================================================================ -->
+
+					<div class="form-group" ng-show="game.isPremium == 1">
+						<label class="control-label col-md-3">Reward Premium List :</label>
+
+						<div class="col-md-6">
+							<div class="list-group reward-premium-list">
+								<a href="" class="list-group-item" ng-repeat="reward in rewardList"  ng-class="{ active : game.rewardId == reward.rewardId, disabled : alreadyPublic == 1 }" ng-click="setRewardForGame(reward.rewardId)">
+									{{ reward.rewardTitle }}
+									<span class="badge">ID : {{ reward.rewardId }}</span>
+								</a>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- TOTAL USERS PLAYED [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Total Users Played :</label>
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled id="input-total-users-played" ng-model="game.totalUsersPlayed">
+						</div>
+					</div>
+
+
+					<!-- TOTAL USERS SOLVED [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Total Users Solved :</label>
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled id="input-total-users-solved" ng-model="game.totalUsersSolved">
+						</div>
+					</div>
+
+
+					<!-- PUBLIC TO USERS
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Public to users :</label>
+
+						<div class="col-md-6">
+							<div class="form-inline">
+								<label class="radio inline">
+									<input type="radio" name="gameIsPublic" value="0" ng-model="game.isPublic" ng-disabled="alreadyPublic" />
+									No
+								</label>
+								<label class="radio inline">
+									<input type="radio" name="gameIsPublic" value="1" ng-model="game.isPublic" ng-disabled="alreadyPublic" />
+									Yes
+								</label>
+							</div>
+
+							<div ng-include="'templates/game-set-to-public-info.html'" ng-show="game.isPublic == 1 && !alreadyPublic"></div>
+						</div>
+					</div>
+
+
+					<!-- BUTTONS
+					================================================================================ -->
+
+					<div class="form-group">
+						<div class="col-xs-offset-3 col-md-6">
+							<button type="button" class="btn btn-danger" ng-click="back()">
+								<i class="fa fa-caret-left"></i> Back
+							</button>
+
+							<!-- SUBMIT BUTTON -->
+							<button type="submit" class="btn btn-success" ng-hide="alreadyPublic" >
+								Save <i class="fa fa-check"></i>
+							</button>
+
+							<div class="alert alert-danger server-message" ng-show="errorMessage.length > 0">
+								<i class="fa fa-times-circle"></i> {{ errorMessage }}
+							</div>
+						</div>
+					</div>
+				</form>
+
+
+				<!-- CROSSWORD GENERATOR
+				================================================================================ -->
+
+				<div class="form-group">
+					<div class="col-md-offset-2 col-md-7">
+						<div ng-include="'templates/game-crossword-change.html'" ng-show="isCrosswordChanged"></div>
+
+						<cw-generator></cw-generator>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->

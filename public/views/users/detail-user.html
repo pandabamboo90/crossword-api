@@ -1,0 +1,421 @@
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			<i class="fa fa-users"></i> Users
+		</h1>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+
+			<div class="panel-heading">
+				<h4><i class="fa fa-edit"></i> Edit user - <small>ID : {{ user.userId }}</small></h4>
+			</div>
+
+			<div class="panel-body">
+				<!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+				<form class="form-horizontal" name="form" ng-submit="submitForm()" novalidate>
+					<!-- NICKNAME
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-nickname">Nickname :</label>
+
+						<div class="col-md-6">
+							<input type="text" name="nickname" class="form-control" id="input-nickname" ng-model="user.nickname"
+								   validator="[required, requiredBlur, notHaveSpecialChars]">
+						</div>
+					</div>
+
+
+					<!-- EMAIL
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-email">Email :</label>
+
+						<div class="col-md-6">
+							<input type="email" name="email" class="form-control" id="input-email" ng-model="user.email"
+								   validator="[email]">
+						</div>
+					</div>
+
+
+					<!-- CREATED DATE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-date-created">Created Date : </label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" ng-model="user.dateCreated" id="input-date-created"
+									   validator="[required, requiredBlur, dateBefore]"
+									   validator-date-before="{{ user.dateLastAccessed }}"
+									   validator-date-before-message="Date Created must be before Date Last Accessed">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- REALNAME
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-realname">Real Name :</label>
+
+						<div class="col-md-6">
+							<input type="text" name="realname" class="form-control" id="input-realname" ng-model="user.realname"
+								   validator="[notHaveSpecialChars]">
+						</div>
+					</div>
+
+
+					<!-- ADDRESS
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-address">Address :</label>
+
+						<div class="col-md-6">
+							<textarea name="address" class="form-control" id="input-address" ng-model="user.address" rows="5"
+									  validator="[notHaveSpecialChars]">
+							</textarea>
+						</div>
+					</div>
+
+
+					<!-- PHONE NUMBER
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-phone">Phone :</label>
+						<div class="col-md-3">
+							<input type="text" name="phone" class="form-control" id="input-phone" ng-model="user.phone"
+								   validator="[number]">
+						</div>
+					</div>
+
+
+					<!-- FACEBOOK
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-facebook">Facebook :</label>
+
+						<div class="col-md-6">
+							<input type="url" name="facebook" class="form-control" id="input-facebook" ng-model="user.facebook"
+								   validator="[urlOptional]"
+								   validator-url-message="Custom message">
+						</div>
+					</div>
+
+
+					<!-- TWITTER
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-twitter">Twitter :</label>
+
+						<div class="col-md-6">
+							<input type="url" name="twitter" class="form-control" id="input-twitter" ng-model="user.twitter"
+								   validator="[urlOptional]">
+						</div>
+					</div>
+
+
+					<!-- GOOGLE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-google">Google+ :</label>
+
+						<div class="col-md-6">
+							<input type="url" name="google" class="form-control" id="input-google" ng-model="user.google"
+								   validator="[urlOptional]">
+						</div>
+					</div>
+
+
+					<!-- NOTIFICATION FLAG
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Receive Notification :</label>
+
+						<div class="col-md-6">
+							<i ng-class="user.notifyFlag | checkmark"></i>
+						</div>
+					</div>
+
+
+					<!-- REVIEW DATE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-date-review-appear">Date review confirm appear :</label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" ng-model="user.dateReviewConfirmAppear" id="input-date-review-appear"
+									   validator="[dateBefore, dateAfter]"
+									   validator-date-before="{{ user.dateSubmitReview }}"
+									   validator-date-before-message="Date Review Confirm Appear must be before Date Submit Review"
+									   validator-date-after="{{ user.dateCreated }}"
+									   validator-date-after-message="Date Review Confirm Appear must be after Date Created">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- SUBMITTED DATE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-date-submit-review">Date submit review :</label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" ng-model="user.dateSubmitReview" id="input-date-submit-review"
+									   validator="[dateAfter]"
+									   validator-date-after="{{ user.dateReviewConfirmAppear }}"
+									   validator-date-after-message="Date Submit Review must be after Date Review Confirm Appear">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- INVITED USER ID [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-intro-userid">Invited User ID :</label>
+
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled id="input-intro-userid" ng-model="user.introUserId">
+						</div>
+					</div>
+
+
+					<!-- INVITED USER NICKNAME [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-intro-nickname">Invited User Nickname :</label>
+						<div class="col-md-6">
+							<input type="text" class="form-control" disabled id="input-intro-nickname" ng-model="user.introUserNickname">
+						</div>
+					</div>
+
+
+					<!-- ACCESS DATE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-date-last-accessed">Access Date :</label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" ng-model="user.dateLastAccessed" id="input-date-last-accessed"
+									   validator="[required, requiredBlur, dateAfter]"
+									   validator-date-after="{{ user.dateCreated }}"
+									   validator-date-after-message="Accessed Date must be before Created Date">
+
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- COINS QUANTITY
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-coin-quantity">Coins Quantity :</label>
+
+						<div class="col-md-3">
+							<input type="number" name="coinsQuantity" class="form-control" id="input-coin-quantity" ng-model="user.coinsQuantity"
+								   validator="[number]">
+						</div>
+					</div>
+
+
+					<!-- COINS USED [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-coin-used">Coins Used :</label>
+
+						<div class="col-md-3">
+							<input type="text" name="totalCoinsUsed" disabled class="form-control" id="input-coin-used" ng-model="user.totalCoinsUsed">
+						</div>
+					</div>
+
+
+					<!-- DATE LAST GET DAILY COINS
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-date-last-get-daily-coins">Date last get daily coins :</label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" ng-model="user.dateGetDailyCoins" id="input-date-last-get-daily-coins"
+									   validator="[dateAfter]"
+									   validator-date-after="{{ user.dateLastAccessed }}"
+									   validator-date-after-message="Date Last Get Daily Coins must be after Date Last Accessed">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- DATE LAST USED COINS
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-date-last-used-coins">Date last used coins :</label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" ng-model="user.dateLastUsedCoins" id="input-date-last-used-coins"
+									   validator="[dateAfter]"
+									   validator-date-after="{{ user.dateLastAccessed }}"
+									   validator-date-after-message="Date Last Used Coins must be after Date Last Accessed">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- REGULAR TICKETS [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Regular tickets quantity :</label>
+
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled ng-model="user.ticketsQuantity" >
+						</div>
+					</div>
+
+
+					<!-- REGULAR TICKETS USED [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Regular tickets used :</label>
+
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled ng-model="user.totalTicketsUsed" >
+						</div>
+					</div>
+
+
+					<!-- PREMIUM TICKETS [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Premium tickets quantity :</label>
+
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled ng-model="user.ticketsQuantityPremium" >
+						</div>
+					</div>
+
+
+					<!-- PREMIUM TICKETS USED [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Premium tickets used :</label>
+
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled ng-model="user.totalTicketsPremiumUsed" >
+						</div>
+					</div>
+
+
+					<!-- GAMES DOWNLOADED [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Games downloaded : </label>
+
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled ng-model="user.gamesDownloaded" >
+						</div>
+					</div>
+
+
+					<!-- GAMES SOLVED [ READONLY ]
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Games solved : </label>
+
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled ng-model="user.totalGamesSolved" >
+						</div>
+					</div>
+
+
+					<!-- TOTAL REWARDS WON [ READONLY ] 
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Total rewards won : </label>
+
+						<div class="col-md-3">
+							<input type="text" class="form-control" disabled ng-model="user.totalRewardsWon" >
+						</div>
+					</div>
+
+
+					<!-- BUTTONS
+					================================================================================ -->
+
+					<div class="form-group">
+						<div class="col-md-offset-3 col-md-6">
+							<button type="button" class="btn btn-danger" ng-click="back()">
+								<i class="fa fa-caret-left"></i> Back
+							</button>
+
+							<button type="submit" class="btn btn-success">
+								Save <i class="fa fa-check"></i>
+							</button>
+
+							<div class="alert alert-danger server-message" ng-show="errorMessage.length > 0">
+								<i class="fa fa-times-circle"></i> {{ errorMessage }}
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+
+
+
+
+

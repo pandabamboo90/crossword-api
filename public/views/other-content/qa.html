@@ -1,0 +1,60 @@
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Q &amp; A </h1>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+<div class="alert alert-success server-message" ng-show="successMessage.length > 0">
+	<i class="fa fa-check-circle-o fa-lg"></i> {{ successMessage }}
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="panel panel-default">
+
+			<div class="panel-heading">
+				<h4><i class="fa fa-edit"></i> Edit form</h4>
+			</div>
+
+			<div class="panel-body">
+				<form class="form-horizontal" name="editForm" ng-submit="updateContent(editForm.$valid)" novalidate> <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+
+					<!-- Q & A LIST
+					================================================================================ -->
+
+					<div class="form-group" ng-class="{ 'has-error' : editForm.content.$invalid && !editForm.content.$pristine }">
+						<label class="control-label col-md-3">Q &amp; A Content : </label>
+
+						<div class="col-md-6">
+							<textarea name="content" class="form-control" ng-model="contentData.content" ui-tinymce="tinymceOptions" rows="20"></textarea>
+
+							<!--<p ng-show="editForm.content.$error.pattern">{{ validateRules.inputNotContain.message }}</p>-->
+						</div>
+					</div>
+
+
+					<!-- BUTTONS
+					================================================================================ -->
+
+					<div class="form-group">
+						<div class="col-md-offset-3 col-md-6">
+							<button type="submit" class="btn btn-success" ng-disabled="editForm.$invalid">
+								Save <i class="fa fa-check"></i>
+							</button>
+
+							<div class="alert alert-danger server-message" ng-show="errorMessage.length > 0">
+								<i class="fa fa-times-circle"></i> {{ errorMessage }}
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+
+
+
+
+

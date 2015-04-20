@@ -1,0 +1,131 @@
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			<i class="fa fa-gamepad"></i> Games
+		</h1>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+
+<div class="row">
+	<div class="col-lg-12">
+		<div ng-include="'templates/game-form-submit-invalid.html'" ng-show="!cwValid && form.submitted"></div>
+
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4>
+					<i class="fa fa-plus-circle"></i> Add new game
+				</h4>
+			</div>
+			<div class="panel-body">
+				<!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+				<form class="form-horizontal" name="form" ng-submit="submitForm()" novalidate>
+
+					<!-- GAME TITLE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3" for="input-game-title">Title :</label>
+
+						<div class="col-md-6">
+							<input type="text" name="gameTitle" class="form-control" id="input-game-title" ng-model="game.gameTitle"
+								   validator="[required, requiredBlur, notHaveSpecialChars]">
+						</div>
+					</div>
+
+
+					<!-- GAME TYPE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Game Type :</label>
+
+						<div class="col-md-9">
+							<div class="form-inline">
+								<label class="radio inline">
+									<input type="radio" name="gameType" value="0" ng-model="game.isPremium" />
+									Normal
+								</label>
+								<label class="radio inline">
+									<input type="radio" name="gameType" value="1" ng-model="game.isPremium" />
+									Premium
+								</label>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- REWARD SELECT [ ONLY FOR PREMIUM GAME ]
+					================================================================================ -->
+
+					<div class="form-group" ng-show="game.isPremium == 1">
+						<label class="control-label col-md-3">Reward Premium List :</label>
+
+						<div class="col-md-6">
+							<div class="list-group reward-premium-list">
+								<a href="" class="list-group-item" ng-repeat="reward in rewardList"  ng-class="{ active : game.rewardId == reward.rewardId, disabled : alreadyPublic == 1 }" ng-click="setRewardForGame(reward.rewardId)">
+									{{ reward.rewardTitle }}
+									<span class="badge">ID : {{ reward.rewardId }}</span>
+								</a>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- PUBLIC TO USERS
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-3">Public to users :</label>
+
+						<div class="col-md-6">
+							<div class="form-inline">
+								<label class="radio inline">
+									<input type="radio" name="gameIsPublic" value="0" ng-model="game.isPublic" />
+									No
+								</label>
+								<label class="radio inline">
+									<input type="radio" name="gameIsPublic" value="1" ng-model="game.isPublic" />
+									Yes
+								</label>
+							</div>
+
+							<div ng-include="'templates/game-set-to-public-info.html'" ng-show="game.isPublic == 1"></div>
+						</div>
+					</div>
+
+
+					<!-- BUTTONS
+					================================================================================ -->
+
+					<div class="form-group">
+						<div class="col-md-offset-3 col-md-6">
+							<button type="button" class="btn btn-danger" ng-click="back()">
+								<i class="fa fa-caret-left"></i> Back
+							</button>
+
+							<!-- SUBMIT BUTTON -->
+							<button type="submit" class="btn btn-success">
+								Add <i class="fa fa-check"></i>
+							</button>
+
+							<div class="alert alert-danger server-message" ng-show="errorMessage.length > 0">
+								<i class="fa fa-times-circle"></i> {{ errorMessage }}
+							</div>
+						</div>
+					</div>
+				</form>
+
+
+				<!-- CROSSWORD GENERATOR
+				================================================================================ -->
+
+				<div class="form-group">
+					<div class="col-md-offset-2 col-md-7">
+						<cw-generator></cw-generator>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->

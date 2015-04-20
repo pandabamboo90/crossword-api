@@ -1,0 +1,195 @@
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">
+			<i class="fa fa-gift"></i> Rewards
+			<a href="rewards/add" class="btn btn-success pull-right">
+				Add new <i class="fa fa-plus-circle"></i>
+			</a>
+		</h1>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+<div class="alert alert-success server-message" ng-show="successMessage.length > 0">
+	<i class="fa fa-check-circle-o fa-lg"></i> {{ successMessage }}
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<!-- Search Form -->
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h4><i class="fa fa-search"></i> Search</h4>
+			</div>
+			<div class="panel-body">
+				<!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+				<form class="form-horizontal" name="form" ng-submit="submitForm()" novalidate>
+
+					<!-- REWARD ID
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-2" for="input-reward-id">Reward ID :</label>
+
+						<div class="col-md-6">
+							<input type="text" name="rewardId" class="form-control" id="input-reward-id" ng-model="searchParameters.rewardId"
+								   validator="[number]">
+						</div>
+					</div>
+
+
+					<!-- REWARD TITLE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-2" for="input-reward-title">Title :</label>
+
+						<div class="col-md-6">
+							<input type="text" name="rewardTitle" class="form-control" id="input-reward-title" ng-model="searchParameters.rewardTitle"
+								   validator="[notHaveSpecialChars]">
+						</div>
+					</div>
+
+
+					<!-- CREATED DATE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-2">Created Date :</label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" placeholder="From" ng-model="searchParameters.dateCreatedFrom"
+									   validator="[dateBefore]"
+									   validator-date-before="{{ searchParameters.dateCreatedTo }}">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" placeholder="To" ng-model="searchParameters.dateCreatedTo"
+									   validator="[dateAfter]"
+									   validator-date-after="{{ searchParameters.dateCreatedFrom }}">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- DEADLINE REGISTER
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-2">Deadline :</label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" placeholder="From" ng-model="searchParameters.dateEndOfAttendingFrom"
+									   validator="[dateBefore]"
+									   validator-date-before="{{ searchParameters.dateEndOfAttendingTo }}">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" placeholder="To" ng-model="searchParameters.dateEndOfAttendingTo"
+									   validator="[dateAfter]"
+									   validator-date-after="{{ searchParameters.dateEndOfAttendingFrom }}">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- SWEEPSTAKES DATE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-2">Sweepstakes Date :</label>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" placeholder="From" ng-model="searchParameters.dateSweepstakesFrom"
+									   validator="[dateBefore]"
+									   validator-date-before="{{ searchParameters.dateSweepstakesTo }}">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+
+						<div class="col-md-3">
+							<div class="input-group date jq-date-picker">
+								<input type="text" class="form-control" placeholder="To" ng-model="searchParameters.dateSweepstakesTo"
+									   validator="[dateAfter]"
+									   validator-date-after="{{ searchParameters.dateSweepstakesFrom }}">
+								<span class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- REWARD TYPE
+					================================================================================ -->
+
+					<div class="form-group">
+						<label class="control-label col-md-2">Rewards Type</label>
+
+						<div class="col-md-9">
+							<div class="form-inline">
+								<label class="radio inline">
+									<input type="radio" name="rewardsType" value="2" ng-model="searchParameters.isPremium" />
+									All
+								</label>
+								<label class="radio inline">
+									<input type="radio" name="rewardsType" value="0" ng-model="searchParameters.isPremium" />
+									Normal
+								</label>
+								<label class="radio inline">
+									<input type="radio" name="rewardsType" value="1" ng-model="searchParameters.isPremium" />
+									Premium
+								</label>
+							</div>
+						</div>
+					</div>
+
+
+					<!-- BUTTONS
+					================================================================================ -->
+
+					<div class="form-group">
+						<div class="col-md-offset-2 col-md-6">
+							<!-- SUBMIT BUTTON -->
+							<button type="submit" class="btn btn-success">
+								Search
+								<i class="fa fa-search"></i>
+							</button>
+
+							<div class="alert alert-danger server-message" ng-show="errorMessage.length > 0">
+								<i class="fa fa-times-circle"></i> {{ errorMessage }}
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div><!-- /.panel -->
+	</div><!-- /.col-lg-12 -->
+
+	<!-- Rewards List -->
+	<div class="col-lg-12">
+		<dn-table settings="rewardsDataTable"></dn-table>
+	</div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+
+
