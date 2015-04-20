@@ -1,4 +1,4 @@
-crosswordApp.controller("rewardsListController", ["$scope", "$routeParams", "rewards", "$location", "trackingData", "$validator",
+app.controller("rewardsListController", ["$scope", "$routeParams", "rewards", "$location", "trackingData", "$validator",
     function($scope, $routeParams, rewards, $location, trackingData, $validator){
         // Init the search parameters
         $scope.searchParameters = {

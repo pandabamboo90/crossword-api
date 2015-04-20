@@ -1,4 +1,4 @@
-crosswordApp.controller("authController", ["$scope", "$location", "admins", "trackingData", "$rootScope", "$window", "$validator", "$routeParams",
+app.controller("authController", ["$scope", "$location", "admins", "trackingData", "$rootScope", "$window", "$validator", "$routeParams",
     function($scope, $location, admins, trackingData, $rootScope, $window, $validator, $routeParams){
         $scope.formSuccess = false;
         $scope.errorMessage = $routeParams.errorMessage;

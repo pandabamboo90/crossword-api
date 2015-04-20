@@ -1,7 +1,4 @@
 module.exports = function(app, router, _u, appFunction, globalSettings, log){
-
-    //console.log(new Date(1730691726*1000).toString(globalSettings.MySQLDateFormat));
-
     var knex = app.get("knex"),
         Promise = app.get("Promise");
 
@@ -9,7 +6,8 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
     /* SEARCH USERS
      * ====================================================================== */
 
-    router.get("/users", function(req, res){
+    router.route("/users")
+        .get(function(req, res){
         var requestQuery = req.query,
             requestParameters = appFunction.convertRequestDataToUnderscore(requestQuery),
             objSearchSQL = appFunction.buildSQLSearchQuery(requestParameters),
@@ -120,10 +118,12 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
     });
 
 
-    /* GET USER BY ID
+
+    /* GET/UPDATE 1 USER BY ID
      * ====================================================================== */
 
-    router.get("/users/:userId", function(req, res) {
+    router.route("/users/:userId")
+        .get(function(req, res) {
         knex.select("*")
             .from("users_list_view")
             .where("user_id", req.param("userId"))
@@ -135,13 +135,8 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
             .catch(function(err){
                 res.send(400, { message : err.toString() });
             });
-    });
-
-    
-    /* UPDATE USERS
-     * ====================================================================== */
-
-    router.put("/users/:userId", function(req, res){
+    })
+        .put(function(req, res){
 
         var normalFields = [
                 "nickname",
@@ -201,7 +196,8 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
     /* GET USERS RANKING
      * ====================================================================== */
 
-    router.get("/users/:userId/ranking", function(req, res){
+    router.route("/users/:userId/ranking")
+        .get(function(req, res){
         var requestQuery = req.query,
             userId = req.param("userId"),
             objSearchSQL = {},
@@ -263,7 +259,8 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
     /* [ MOBILE ] GET ALL REWARDS ATTENDED BY A USER
      * ====================================================================== */
 
-    router.get("/users/:userId/rewards", function (req, res) {
+    router.route("/users/:userId/rewards")
+        .get(function (req, res) {
         var requestQuery = req.query,
             userId = req.param("userId"),
             requestParameters = appFunction.convertRequestDataToUnderscore(requestQuery),

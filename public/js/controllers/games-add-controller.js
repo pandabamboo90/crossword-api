@@ -1,4 +1,4 @@
-crosswordApp.controller("gameAddController", ["$scope", "$routeParams", "games", "$location", "cwGeneratorAPI", "FileUploader", "$validator", "rewards",
+app.controller("gameAddController", ["$scope", "$routeParams", "games", "$location", "cwGeneratorAPI", "FileUploader", "$validator", "rewards",
     function($scope, $routeParams, games, $location, cwGeneratorAPI, FileUploader, $validator, rewards){
         $scope.game = {
             gameTitle : "",

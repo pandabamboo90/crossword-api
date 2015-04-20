@@ -1,4 +1,4 @@
-crosswordApp.controller("changePasswordController", ["$scope", "$location", "admins", "$window", "$validator",
+app.controller("changePasswordController", ["$scope", "$location", "admins", "$window", "$validator",
     function($scope, $location, admins, $window, $validator){
         // User info
         var userId = angular.fromJson($window.sessionStorage.loggedUserInfo).adminId;

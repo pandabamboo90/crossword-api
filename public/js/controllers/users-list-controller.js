@@ -1,4 +1,4 @@
-crosswordApp.controller("usersListController", ["$scope", "$routeParams", "users", "$location", "SERVER_CONFIG", "$validator",
+app.controller("usersListController", ["$scope", "$routeParams", "users", "$location", "SERVER_CONFIG", "$validator",
     function($scope, $routeParams, users, $location, SERVER_CONFIG, $validator){
         $scope.searchParameters = {
             userId : "",

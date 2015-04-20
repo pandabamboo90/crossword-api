@@ -48,6 +48,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(express.static('public'));
+app.get('*', function(req, res) {
+    res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+});
 
 // development only
 if (app.get("env") === "development") {

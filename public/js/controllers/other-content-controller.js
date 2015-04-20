@@ -1,4 +1,4 @@
-crosswordApp.controller("otherContentController", ["$scope", "$routeParams", "$location", "otherContent",
+app.controller("otherContentController", ["$scope", "$routeParams", "$location", "otherContent",
     function($scope, $routeParams, $location, others){
         var contentType = $routeParams.contentType;
 

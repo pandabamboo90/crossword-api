@@ -1,4 +1,4 @@
-crosswordApp.controller("gameDetailController", ["$scope", "$routeParams", "games", "$location", "cwGeneratorAPI", "FileUploader", "$validator", "rewards",
+app.controller("gameDetailController", ["$scope", "$routeParams", "games", "$location", "cwGeneratorAPI", "FileUploader", "$validator", "rewards",
     function($scope, $routeParams, games, $location, cwGeneratorAPI, FileUploader, $validator, rewards){
         var dateFields = [
             "dateCreated"

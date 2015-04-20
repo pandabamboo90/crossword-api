@@ -1,4 +1,4 @@
-crosswordApp.controller("gamesListController", ["$scope", "$routeParams", "games", "$location", "$validator",
+app.controller("gamesListController", ["$scope", "$routeParams", "games", "$location", "$validator",
     function($scope, $routeParams, games, $location, $validator){
         $scope.searchParameters = {
             gameId : "",
