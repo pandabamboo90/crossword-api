@@ -1,5 +1,5 @@
-app.controller("changePasswordController", ["$scope", "$location", "admins", "$window", "$validator",
-    function($scope, $location, admins, $window, $validator){
+app.controller("changePasswordController", ["$scope", "$location", "adminsAPIService", "$window", "$validator",
+    function($scope, $location, adminsAPIService, $window, $validator){
         // User info
         var userId = angular.fromJson($window.sessionStorage.loggedUserInfo).adminId;
         $scope.user = {
@@ -18,7 +18,7 @@ app.controller("changePasswordController", ["$scope", "$location", "admins", "$w
                 .validate($scope, "user")
                 .success(function(){
                     // Form
-                    admins.changePassword($scope.user)
+                    adminsAPIService.changePassword($scope.user)
                         .$promise
                         .then(function(data){
                             $scope.user = {

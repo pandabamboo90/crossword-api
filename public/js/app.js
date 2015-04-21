@@ -60,6 +60,8 @@ var app = angular.module("crossword-app", [
 //                    $location.path("/login");
 //                }
 
+                console.log($rootScope.loggedUserInfo);
+
                 if(nextRoute.access && nextRoute.access.requiredLogin && !angular.isObject($rootScope.loggedUserInfo)){
 //                    $rootScope.loggedUserInfo = null;
                     $rootScope.showNav = false;

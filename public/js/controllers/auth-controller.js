@@ -1,5 +1,5 @@
-app.controller("authController", ["$scope", "$location", "admins", "trackingData", "$rootScope", "$window", "$validator", "$routeParams",
-    function($scope, $location, admins, trackingData, $rootScope, $window, $validator, $routeParams){
+app.controller("authController", ["$scope", "$location", "adminsAPIService", "trackingData", "$rootScope", "$window", "$validator", "$routeParams",
+    function($scope, $location, adminsAPIService, trackingData, $rootScope, $window, $validator, $routeParams){
         $scope.formSuccess = false;
         $scope.errorMessage = $routeParams.errorMessage;
         //console.log($routeParams);
@@ -34,7 +34,7 @@ app.controller("authController", ["$scope", "$location", "admins", "trackingData
                 .validate($scope, "user")
                 .success(function(){
                     // Form
-                    admins.login($scope.user)
+                    adminsAPIService.login($scope.user)
                         .$promise
                         .then(function(data){
                             if(data.token && data.user){

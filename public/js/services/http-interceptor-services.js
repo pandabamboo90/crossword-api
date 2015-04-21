@@ -1,5 +1,5 @@
-app.factory("tokenInterceptor", ["$rootScope", "$q", "$window", "$location", "trackingData",
-    function ($rootScope, $q, $window, $location, trackingData) {
+app.factory("tokenInterceptor", ["$rootScope", "$q", "$window", "$location",
+    function ($rootScope, $q, $window, $location) {
         return {
             // On request success
             request: function (config) {

@@ -1,4 +1,4 @@
-app.factory("admins", ["$resource", "SERVER_CONFIG",
+app.factory("adminsAPIService", ["$resource", "SERVER_CONFIG",
     function ($resource, SERVER_CONFIG) {
         return $resource(SERVER_CONFIG.apiUrl() + "/admins/:adminId", {
             adminId : "@adminId"
