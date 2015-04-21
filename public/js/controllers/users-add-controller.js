@@ -1,4 +1,4 @@
-crosswordApp.controller("userAddController", ["$scope", "$routeParams", "users", "$location", "SERVER_CONFIG", "$rootScope", "games", "rewards",
+app.controller("userAddController", ["$scope", "$routeParams", "users", "$location", "SERVER_CONFIG", "$rootScope", "games", "rewards",
     function($scope, $routeParams, users, $location, SERVER_CONFIG, $rootScope, games, rewards){
 //        var dateFields = [
 //            "dateCreated",

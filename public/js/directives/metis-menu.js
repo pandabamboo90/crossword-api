@@ -1,44 +1,7 @@
-// Include jQuery Date Picker
-crosswordApp.directive("jqDatePicker", function(){
+app.directive("metisMenu", function(){
     return {
         restrict: "AC",
-        scope : {},
-        link: function(scope, element, attrs) {
-            element.datepicker({
-                todayBtn: "linked",
-                language: "ja",
-                autoclose: true,
-                //format: "mm-dd-yyyy",
-                todayHighlight: true,
-                orientation: "top auto"
-            });
-
-            setTimeout(function(){
-                var currentDate = element.find("input").val();
-                element.datepicker("update", currentDate);
-            },500);
-        }
-    }
-});
-
-
-crosswordApp.directive("bootstrapTabs", function () {
-    return {
-        restrict: "AC",
-        scope : {},
-        link: function (scope, element, attrs) {
-            element.find("a").click(function(e) {
-                e.preventDefault();
-                $(this).tab("show");
-            });
-        }
-    };
-});
-
-crosswordApp.directive("metisMenu", function(){
-    return {
-        restrict: "AC",
-//        scope : true, // Inherit the scope
+        //        scope : true, // Inherit the scope
         scope : {},
         link: function (scope, element, attrs) {
             //console.log(element);
@@ -60,7 +23,7 @@ crosswordApp.directive("metisMenu", function(){
                 }
 
                 var height = (this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height;
-                    height = height - topOffset;
+                height = height - topOffset;
                 if (height < 1) height = 1;
                 if (height > topOffset) {
                     $("#page-wrapper").css("min-height", (height) + "px");

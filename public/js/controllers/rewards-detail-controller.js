@@ -1,4 +1,4 @@
-crosswordApp.controller("rewardDetailController", ["$scope", "$routeParams", "rewards", "$location", "trackingData", "SERVER_CONFIG", "FileUploader", "$validator",
+app.controller("rewardDetailController", ["$scope", "$routeParams", "rewards", "$location", "trackingData", "SERVER_CONFIG", "FileUploader", "$validator",
     function($scope, $routeParams, rewards, $location, trackingData, SERVER_CONFIG, FileUploader, $validator){
         // Set the active tab for tabs pane
         if(_.isEmpty(trackingData.rewards.activeTabId)){

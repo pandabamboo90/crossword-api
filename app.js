@@ -36,11 +36,10 @@ var express = require("express"),
 
 
 
-    //log.level("error");
+//
+// All environments
+//
 
-
-
-// all environments
 app.set("port", process.env.PORT || 5000);
 app.use(cors());                                     // Enable Cross-Origin Resource Sharing on NodeJS Server
 app.use(morgan("dev",{})); 				             // log every request to the console
@@ -48,17 +47,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-
-// development only
-if (app.get("env") === "development") {
-    //app.use(errorhandler());
-}
-
-
-// production only
-if (app.get("env") === "production") {
-
-}
 
 
 
@@ -84,9 +72,9 @@ var appFunction = require("./api/app-function")(app, fs, fastCSV, _u, mysql, glo
  * - Pass the pool object for connecting db
  * ====================================================================== */
 
-
-/* Authenticate
- * ====================================================================== */
+//
+// Authenticate
+//
 
 var expressJwt = require("express-jwt");
 var jwt = require("jsonwebtoken");
@@ -101,8 +89,9 @@ require("./api/upload")(app, publicRouter, _u, appFunction, globalSettings, fast
 
 
 
-/* API
- * ====================================================================== */
+//
+// APIs routes
+//
 
 var apiRouter = express.Router();
 
@@ -111,38 +100,70 @@ apiRouter.use(expressJwt({
     secret: app.get("SECRET")
 }));
 
-app.use("/api", apiRouter);                                            // APIs routes
+app.use("/api", apiRouter);
 require("./api/api")(app, apiRouter, pool, _u, appFunction, globalSettings, email, apn, gcm, fastCSV, path, fs, log);
 
+
+
+//
+// Static files
+//
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(function(req, res) {
+    res.sendfile(__dirname + "/public/index.html"); // load the single view file (angular will handle the page changes on the front-end)
+});
 
 /*
  * Start app
  * ======================================================================
  */
 
-// Error handler at the very last !!!
-//var errorHandler = require("express-error-handler"),
-//    handler = errorHandler({
-//        handlers: {
-//            "404": function err404() {
-//                // do some custom thing here...
-//            }
-//        }
-//    });
 //
+// Catch 404 and forward to error handler
 //
+
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+
+
 //
-//app.use(function (err, req, res, next) {
-//    console.log(err);
-//    next(err);
-//});
+// Development
 //
-//app.use( errorHandler.httpError(400) );
-//app.use( errorHandler({server: server}) );
+
+if (app.get("env") === "development") {
+    // Development error handler will print stacktrace
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.send({
+            message: err.message,
+            error: err
+        });
+    });
+}
+
+
+//
+// Production
+//
+
+if (app.get("env") === "production") {
+    // Production error handler - no stacktraces leaked to user
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.send({
+            message: err.message,
+            error: {}
+        });
+    });
+}
+
 
 
 server.listen(app.get("port"), function () {
     console.log("Express server listening on port " + app.get("port"));
 });
-
-//server.close();

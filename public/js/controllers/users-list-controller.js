@@ -1,5 +1,5 @@
-crosswordApp.controller("usersListController", ["$scope", "$routeParams", "users", "$location", "SERVER_CONFIG", "$validator",
-    function($scope, $routeParams, users, $location, SERVER_CONFIG, $validator){
+app.controller("usersListController", ["$scope", "$routeParams", "users", "$location", "$validator",
+    function($scope, $routeParams, users, $location, $validator){
         $scope.searchParameters = {
             userId : "",
             nickname : "",
@@ -222,7 +222,6 @@ crosswordApp.controller("usersListController", ["$scope", "$routeParams", "users
             users.searchUsers()
                 .$promise
                 .then(function(data){
-                    console.log(data);
                     $scope.usersDataTable = angular.extend(usersDataTable, data);
                 },function(err){
                     //console.log(err);

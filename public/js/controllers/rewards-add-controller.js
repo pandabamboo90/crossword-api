@@ -1,4 +1,4 @@
-crosswordApp.controller("rewardAddController", ["$scope", "rewards", "$location", "SERVER_CONFIG", "FileUploader", "$validator",
+app.controller("rewardAddController", ["$scope", "rewards", "$location", "SERVER_CONFIG", "FileUploader", "$validator",
     function($scope, rewards, $location, SERVER_CONFIG, FileUploader, $validator){
         var dateFields = [
             "dateEndOfAttending",

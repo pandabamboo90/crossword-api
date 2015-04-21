@@ -1,4 +1,4 @@
-crosswordApp.controller("detailUserAttendedController", ["$scope", "$routeParams", "rewards", "$location", "$validator",
+app.controller("detailUserAttendedController", ["$scope", "$routeParams", "rewards", "$location", "$validator",
     function($scope, $routeParams, rewards, $location, $validator){
 
         var dateFields = [

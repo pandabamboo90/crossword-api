@@ -1,4 +1,4 @@
-crosswordApp.filter("checkmark", function() {
+app.filter("checkmark", function() {
     return function(input) {
 
         if(typeof(input) == "number")
