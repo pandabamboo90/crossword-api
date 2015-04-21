@@ -1,9 +1,10 @@
-app.controller("changePasswordController", ["$scope", "$location", "adminsAPIService", "$window", "$validator",
-    function($scope, $location, adminsAPIService, $window, $validator){
-        // User info
-        var userId = angular.fromJson($window.sessionStorage.loggedUserInfo).adminId;
-        $scope.user = {
-            adminId : userId,
+app.controller("changePasswordController", ["$scope", "adminsAPIService", "authServices", "$validator",
+    function($scope, adminsAPIService, authServices, $validator){
+
+        $scope.currentUser = authServices.getCurrentUser();
+
+        $scope.changePasswordInfo = {
+            adminId : $scope.currentUser.adminId,
             currentPassword : "",
             password : "",
             confirmPassword : ""
@@ -15,16 +16,16 @@ app.controller("changePasswordController", ["$scope", "$location", "adminsAPISer
         $scope.submitForm = function() {
             // Run the validate before submit form
             $validator
-                .validate($scope, "user")
+                .validate($scope, "changePasswordInfo")
                 .success(function(){
                     // Form
-                    adminsAPIService.changePassword($scope.user)
+                    adminsAPIService.changePassword($scope.changePasswordInfo)
                         .$promise
                         .then(function(data){
-                            $scope.user = {
-                                userId : userId,
+                            $scope.changePasswordInfo = {
+                                adminId : $scope.currentUser.adminId,
                                 currentPassword : "",
-                                newPassword : "",
+                                password : "",
                                 confirmPassword : ""
                             };
 
@@ -32,12 +33,12 @@ app.controller("changePasswordController", ["$scope", "$location", "adminsAPISer
                             $scope.successMessage = data.message;
                         }, function(err){
                             // Fail to change password
-                            //console.log(err)
                             $scope.errorMessage = err.data.message;
                         });
                 })
-                .error(function(){
+                .error(function(err){
                     // Do something when error happen
+                    console.info(err)
                 });
         }
     }

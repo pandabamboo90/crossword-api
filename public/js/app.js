@@ -18,8 +18,8 @@ var app = angular.module("crossword-app", [
             return this.hostUrl() + "/api"
         }
     })
-    .run(["$rootScope", "$location", "$window",
-        function($rootScope, $location, $window) {
+    .run(["$rootScope", "$location", "$localStorageService", "authServices",
+        function($rootScope, $location, $localStorageService, authServices) {
             $rootScope.isActive = function (viewLocation) {
                 return $location.path().indexOf(viewLocation) == 0;
             };
@@ -44,33 +44,28 @@ var app = angular.module("crossword-app", [
 
             // Check user logged in, if not - redirect to login page
             $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
-                // Check token existed and user already logged in -> Use it to access API server
-                if($window.sessionStorage.token && $window.sessionStorage.loggedUserInfo){
-                    $rootScope.loggedUserInfo = angular.fromJson($window.sessionStorage.loggedUserInfo);
-                    $rootScope.showNav = true;
-                }
+                var currentUser = $localStorageService.getObject("currentUser");
 
-//                if(nextRoute.originalPath == "/login" || (nextRoute.access && nextRoute.access.requiredLogin && !angular.isObject($rootScope.loggedUserInfo))){
-//                    $rootScope.loggedUserInfo = null;
-//                    $rootScope.showNav = false;
-//
-//                    delete $window.sessionStorage.loggedUserInfo;
-//                    delete $window.sessionStorage.token;
-//
-//                    $location.path("/login");
-//                }
+                // Not yet logged in -> Redirect
+                if(!currentUser){
+                    if(nextRoute.access && nextRoute.access.requiredLogin){
+                        console.log(nextRoute.access);
+                        $location.path("/login").search({
+                            errorMessage : "You have to login first."
+                        });
+                    }
+                }else{
+                    // Already logged in, check token session
+                    var currentTime = new Date();
+                    var expireTime = new Date(currentUser.exp * 1000);
 
-                console.log($rootScope.loggedUserInfo);
-
-                if(nextRoute.access && nextRoute.access.requiredLogin && !angular.isObject($rootScope.loggedUserInfo)){
-//                    $rootScope.loggedUserInfo = null;
-                    $rootScope.showNav = false;
-
-                    delete $window.sessionStorage.token;
-
-                    $location.path("/login").search({
-                        errorMessage : "Permission denied. Please login."
-                    });
+                    // Token expired -> Request a new one
+                    if(currentTime.compareTo(expireTime) >= 0){
+                        authServices.clearCurrentUser();
+                        $location.path("/login").search({
+                            errorMessage : "Session expired."
+                        });
+                    }
                 }
             });
         }

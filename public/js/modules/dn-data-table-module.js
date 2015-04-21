@@ -176,7 +176,7 @@
                 settings : "=" // 2-ways binding scope.settings
             },
             controller: dnDataTableController,
-            templateUrl : "templates/dn-data-table-template.html",
+            templateUrl : "js/modules/templates/dn-data-table-template.html",
             compile: function(tElem, attrs){
                 // Do optional DOM transformation here
 

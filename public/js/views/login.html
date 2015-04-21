@@ -14,7 +14,7 @@
 						<div class="form-group">
 							<div class="input-group margin-bottom-sm">
 								<span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-								<input id="nickname" name="nickname" class="form-control" placeholder="Nickname" type="text" ng-model="user.nickname"
+								<input id="nickname" name="nickname" class="form-control" placeholder="Nickname" type="text" ng-model="loginInfo.nickname"
 									   validator="[required, requiredBlur]" />
 							</div>
 						</div>
@@ -26,7 +26,7 @@
 						<div class="form-group">
 							<div class="input-group margin-bottom-sm">
 								<span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-								<input id="password" name="password" class="form-control" placeholder="Password" type="password" ng-model="user.password"
+								<input id="password" name="password" class="form-control" placeholder="Password" type="password" ng-model="loginInfo.password"
 									   validator="[required, requiredBlur]" />
 							</div>
 						</div>
@@ -37,7 +37,7 @@
 
 						<div class="checkbox">
 							<label>
-								<input name="remember" type="checkbox" ng-model="user.rememberMe">Remember Me
+								<input name="remember" type="checkbox" ng-model="loginInfo.rememberMe">Remember Me
 							</label>
 						</div>
 

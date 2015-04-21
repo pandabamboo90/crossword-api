@@ -201,7 +201,7 @@
             replace : false, // The directive content will be appended inside
             scope : {},
             controller: cwGeneratorController,
-            templateUrl : "templates/cw-generator-template.html",
+            templateUrl : "js/modules/templates/cw-generator-template.html",
             compile: function(tElem, attrs){
                 // Do optional DOM transformation here
 

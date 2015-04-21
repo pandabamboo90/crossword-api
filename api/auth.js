@@ -6,52 +6,54 @@ module.exports = function(app, router, jwt, _u, appFunction, globalSettings, poo
 
     router.route("/authenticate")
         .post(function(req, res){
-        var requestBody = req.body,
-            nickname = requestBody.nickname,
-            password = requestBody.password,
-            rememberMe = requestBody.rememberMe ? 1 : 0;
+            var requestBody = req.body,
+                nickname = requestBody.nickname,
+                password = requestBody.password,
+                rememberMe = requestBody.rememberMe ? 1 : 0;
 
-        if (!nickname || !password) throw new Error(globalSettings.errorMessage.usernameAndPasswordRequire);
+            if (!nickname || !password) throw new Error(globalSettings.errorMessage.usernameAndPasswordRequire);
 
-        var admin = null;
-        knex.select("*")
-            .from("admins")
-            .where({
-                nickname : nickname
-            })
-            .then(function(_admin){
-                admin = appFunction.convertQueryResultData(_admin)[0];
-                if(!admin) throw Error(globalSettings.errorMessage.wrongPassword);
+            var admin = null;
+            knex.select("*")
+                .from("admins")
+                .where({
+                    nickname : nickname
+                })
+                .then(function(_admin){
+                    admin = appFunction.convertQueryResultData(_admin)[0];
+                    if(!admin) throw Error(globalSettings.errorMessage.wrongPassword);
 
-                admin.rememberMe = rememberMe;
-                return knex("admins")
-                    .update({
-                        remember_me : rememberMe
-                    })
-                    .where({
-                        admin_id : admin.adminId
-                    })
-            })
-            .then(function(){
-                return bcrypt.compareAsync(password, admin.password);
-            })
-            .then(function(matched){
-                if(!matched) throw Error(globalSettings.errorMessage.wrongPassword);
+                    admin.rememberMe = rememberMe;
+                    return knex("admins")
+                        .update({
+                            remember_me : rememberMe
+                        })
+                        .where({
+                            admin_id : admin.adminId
+                        })
+                })
+                .then(function(){
+                    return bcrypt.compareAsync(password, admin.password);
+                })
+                .then(function(matched){
+                    if(!matched) throw Error(globalSettings.errorMessage.wrongPassword);
 
-                // Create a new token for user
-                var token = jwt.sign(admin, app.get("SECRET"), {
-                    expiresInMinutes: 129600 // 3 months
+                    // Create a new token for user
+                    var token = jwt.sign(admin, app.get("SECRET"), {
+//                        expiresInMinutes: 129600 // 3 months
+                        expiresInMinutes: 1
+                    });
+
+                    admin.token = token;
+
+                    res.json({
+                        user : _u.omit(admin, "password")
+                    });
+                })
+                .catch(function(err){
+                    res.send(400, { message : err.toString() });
                 });
-
-                res.json({
-                    user : _u.omit(admin, "password"),
-                    token : token
-                });
-            })
-            .catch(function(err){
-                res.send(400, { message : err.toString() });
-            });
-    });
+        });
 
     /*
      * [ MOBILE ] - USER REGISTER

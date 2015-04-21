@@ -1,13 +1,15 @@
-app.factory("tokenInterceptor", ["$rootScope", "$q", "$window", "$location",
-    function ($rootScope, $q, $window, $location) {
+app.factory("tokenInterceptor", ["$rootScope", "$q", "$location", "authServices", "$localStorageService",
+    function ($rootScope, $q, $location, authServices, $localStorageService) {
         return {
             // On request success
             request: function (config) {
                 config.headers = config.headers || {};
 
                 // Attach the token to header for authenticate with server
-                if ($window.sessionStorage.token) {
-                    config.headers.Authorization = "Bearer " + $window.sessionStorage.token;
+                var currentUser = $localStorageService.getObject("currentUser");
+                if (currentUser) {
+                    authServices.setCurrentUser(currentUser);
+                    config.headers.Authorization = "Bearer " + authServices.getCurrentUser().token;
                 }
                 return config || $q.when(config);
             },
@@ -26,13 +28,8 @@ app.factory("tokenInterceptor", ["$rootScope", "$q", "$window", "$location",
 
                 // The response contains the data about the error.
                 if (response.status === 401) {
-                    //                    $rootScope.loggedUserInfo = null;
-                    $rootScope.showNav = false;
+                    authServices.clearCurrentUser();
 
-                    //                    delete $window.sessionStorage.loggedUserInfo;
-                    delete $window.sessionStorage.token;
-
-                    //console.log(response);
                     // Login again to renew the token
                     $location.path("/login").search({
                         errorMessage : "Your session has been expired. Please login again."
