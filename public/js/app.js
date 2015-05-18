@@ -45,9 +45,8 @@ var app = angular.module("crossword-app", [
             // Check user logged in, if not - redirect to login page
             $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
                 var currentUser = $localStorageService.getObject("currentUser");
-
                 // Not yet logged in -> Redirect
-                if(!currentUser){
+                if($.isEmptyObject(currentUser)){
                     if(nextRoute.access && nextRoute.access.requiredLogin){
                         console.log(nextRoute.access);
                         $location.path("/login").search({
@@ -58,7 +57,7 @@ var app = angular.module("crossword-app", [
                     // Already logged in, check token session
                     var currentTime = new Date();
                     var expireTime = new Date(currentUser.exp * 1000);
-
+                    console.log(expireTime);
                     // Token expired -> Request a new one
                     if(currentTime.compareTo(expireTime) >= 0){
                         authServices.clearCurrentUser();
