@@ -19,10 +19,11 @@ module.exports = function(app, router, pool, _u, appFunction, globalSettings, em
         }else{
             knex.select("*")
                 .from("admins")
-                .where("admin_id", req.param("adminId"))
+                .where("admin_id", req.params["adminId"])
                 .then(function(_admin){
                     admin = appFunction.convertQueryResultData(_admin)[0];
                     return bcrypt.compareAsync(currentPassword, admin.password);
+//                    return true
                 })
                 .then(function(matched){
                     if(!matched) return Promise.reject(new Error(globalSettings.errorMessage.wrongPassword));
@@ -35,7 +36,7 @@ module.exports = function(app, router, pool, _u, appFunction, globalSettings, em
                 .then(function(hash){
                     knex("admins")
                         .update("password", hash)
-                        .where("admin_id", req.param("adminId"))
+                        .where("admin_id", req.params["adminId"])
                         .then(function(){
                             res.json({
                                 message : globalSettings.message.passwordUpdate

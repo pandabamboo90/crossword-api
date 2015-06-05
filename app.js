@@ -109,9 +109,9 @@ require("./api/api")(app, apiRouter, pool, _u, appFunction, globalSettings, emai
 // Static files
 //
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { redirect : false }));
 app.use(function(req, res) {
-    res.sendfile(__dirname + "/public/index.html"); // load the single view file (angular will handle the page changes on the front-end)
+    res.sendFile(__dirname + "/public/index.html"); // load the single view file (angular will handle the page changes on the front-end)
 });
 
 /*

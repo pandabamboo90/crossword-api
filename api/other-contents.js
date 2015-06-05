@@ -28,7 +28,7 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
     
     router.put("/:contentType", function(req, res){
         var requestBody = req.body,
-            contentType = req.param("contentType"),
+            contentType = req.params["contentType"],
             updateFields = {
                 content : requestBody.content
             };

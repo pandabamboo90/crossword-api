@@ -129,7 +129,7 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
 
     router.get("/rewards/:userId/list", function(req, res){
         var requestQuery = req.query,
-            userId = req.param("userId"),
+            userId = req.params["userId"],
             requestParameters = appFunction.convertRequestDataToUnderscore(requestQuery),
             objSearchSQL = appFunction.buildSQLSearchQuery(requestParameters),
             currentPage = requestQuery.currentPage ? parseInt(requestQuery.currentPage) : 1,
@@ -184,7 +184,7 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
     router.get("/rewards/:rewardId", function(req, res) {
         knex.select("*")
             .from("rewards_list_view")
-            .where("reward_id", req.param("rewardId"))
+            .where("reward_id", req.params["rewardId"])
             .then(function(_result){
                 var result = appFunction.convertQueryResultData(_result)
                     result[0].currentDatetime = (new Date).getTime();
@@ -221,9 +221,9 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
         knex.transaction(function(trx){
                 return trx("rewards")
                     .update(updateNormalFields)
-                    .where("reward_id", req.param("rewardId"))
+                    .where("reward_id", req.params["rewardId"])
                     .then(function(){
-                        return trx.raw("update rewards set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where reward_id = ?", req.param("rewardId"));
+                        return trx.raw("update rewards set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where reward_id = ?", req.params["rewardId"]);
                     })
             })
             .then(function(updatedRow) {
@@ -424,7 +424,7 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
         var requestQuery = req.query,
             requestParameters = appFunction.convertRequestDataToUnderscore(requestQuery),
             objSearchSQL = appFunction.buildSQLSearchQuery(requestParameters),
-            viewName = req.param("listType").toLowerCase() === "attended" ? "users_attended_list_view" : "users_won_list_view",
+            viewName = req.params["listType"].toLowerCase() === "attended" ? "users_attended_list_view" : "users_won_list_view",
             currentPage = requestQuery.currentPage ? parseInt(requestQuery.currentPage) : 1,
             result = {
                 pagination : {},
@@ -437,9 +437,9 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
 
         knex.count("* as totalRowCount")
             .from(viewName)
-            //.where("reward_id", req.param("rewardId"))
+            //.where("reward_id", req.params["rewardId"])
             .whereRaw(objSearchSQL.sqlWhere, objSearchSQL.whereParams)
-            .andWhere("reward_id", req.param("rewardId"))
+            .andWhere("reward_id", req.params["rewardId"])
             .then(function(_result){
                 var totalRowCount = _u.values(_result[0])[0];
 
@@ -467,9 +467,9 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
 
                     knex.select(columns)
                         .from(viewName)
-                        //.where("reward_id", req.param("rewardId"))
+                        //.where("reward_id", req.params["rewardId"])
                         .whereRaw(objSearchSQL.sqlWhere, objSearchSQL.whereParams)
-                        .andWhere("reward_id", req.param("rewardId"))
+                        .andWhere("reward_id", req.params["rewardId"])
                         .orderBy(objSearchSQL.orderBy, objSearchSQL.orderDirection)
                         .offset(result.pagination.startRow)
                         .limit(result.pagination.maxRowsPerQuery)
@@ -503,13 +503,13 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
      * ====================================================================== */
 
     router.get("/rewards/:rewardId/users/:listType/:userId", function (req, res) {
-        var viewName = req.param("listType").toLowerCase() === "attended" ? "users_attended_list_view" : "users_won_list_view";
+        var viewName = req.params["listType"].toLowerCase() === "attended" ? "users_attended_list_view" : "users_won_list_view";
 
         knex.select("*")
             .from(viewName)
             .where({
-                reward_id : req.param("rewardId"),
-                user_id : req.param("userId")
+                reward_id : req.params["rewardId"],
+                user_id : req.params["userId"]
             })
             .then(function(_result){
                 var result = appFunction.convertQueryResultData(_result);
@@ -543,7 +543,7 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
             "date_review_confirm_appear",
             "date_submit_review"
         ],
-            listType = req.param("listType"),
+            listType = req.params["listType"],
             requestBody = req.body,
             requestParameters = appFunction.convertRequestDataToUnderscore(requestBody),
             updateNormalFields = _u.pick(requestParameters, normalFields),
@@ -566,11 +566,11 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
                     .join("users_rewards", "users.user_id", "=", "users_rewards.user_id")
                     .update(updateNormalFields)
                     .where({
-                        "users.user_id" : req.param("userId"),
-                        reward_id: req.param("rewardId")
+                        "users.user_id" : req.params["userId"],
+                        reward_id: req.params["rewardId"]
                     })
                     .then(function(){
-                        return trx.raw("update users set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where user_id = ?", req.param("userId"));
+                        return trx.raw("update users set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where user_id = ?", req.params["userId"]);
                     })
                     .then(function(){
                         console.log("==== WIN OR LOSE - all fields updated.");
@@ -583,7 +583,7 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
                             trx("rewards")
                                 .update("status", 2)
                                 .where({
-                                    reward_id: req.param("rewardId")
+                                    reward_id: req.params["rewardId"]
                                 })
                                 .then(function() {
                                     console.log("==== REWARD STATUS UPDATED");
@@ -669,7 +669,7 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
                                                 agent.createMessage()
                                                     .device(requestBody.deviceToken)
                                                     .alert(globalSettings.message.rewardWinner)
-                                                    .set("rewardId", req.param("rewardId"))
+                                                    .set("rewardId", req.params["rewardId"])
                                                     .send();
 
                                                 agent.connect(function (err) {
@@ -730,7 +730,7 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
                                                     res.json(result);
                                                 });
                                             }else{
-                                                console.log("==== USER " , req.param("userId") , " TURN OFF THE PUSH NOTIFICATION SETTING");
+                                                console.log("==== USER " , req.params["userId"] , " TURN OFF THE PUSH NOTIFICATION SETTING");
                                                 res.json(result);
                                             }
                                         })
@@ -756,7 +756,7 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
     router.get("/rewards/:rewardId/users/:listType/:userId/history", function (req, res) {
         var requestQuery = req.query,
             objSearchSQL = {},
-            viewName = req.param("listType").toLowerCase() === "attended" ? "users_attended_list_view" : "users_won_list_view",
+            viewName = req.params["listType"].toLowerCase() === "attended" ? "users_attended_list_view" : "users_won_list_view",
             currentPage = requestQuery.currentPage ? parseInt(requestQuery.currentPage) : 1,
             result = {
                 pagination : {},
@@ -770,8 +770,8 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
 
         knex.count("* as totalRowCount")
             .from(viewName)
-            .where("user_id", req.param("userId"))
-            .whereNotIn("reward_id", req.param("rewardId"))
+            .where("user_id", req.params["userId"])
+            .whereNotIn("reward_id", req.params["rewardId"])
             .then(function(_result){
                 var totalRowCount = _u.values(_result[0])[0];
 
@@ -787,8 +787,8 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
 
                     knex.select("*")
                         .from(viewName)
-                        .where("user_id", req.param("userId"))
-                        .whereNotIn("reward_id", req.param("rewardId"))
+                        .where("user_id", req.params["userId"])
+                        .whereNotIn("reward_id", req.params["rewardId"])
                         .orderBy(objSearchSQL.orderBy, objSearchSQL.orderDirection)
                         .then(function(_result){
                             result.data = appFunction.convertQueryResultData(_result);
@@ -814,8 +814,8 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
         knex.select("*")
             .from("users_rewards")
             .where({
-                user_id : req.param("userId"),
-                reward_id : req.param("rewardId")
+                user_id : req.params["userId"],
+                reward_id : req.params["rewardId"]
             })
             .then(function(_result){
                 // User already attended in this reward -- UPDATE quantity
@@ -824,8 +824,8 @@ module.exports = function (app, router, pool, _u, appFunction, globalSettings, e
                     return knex("users_rewards")
                         .update(requestParameters)
                         .where({
-                            user_id : req.param("userId"),
-                            reward_id : req.param("rewardId")
+                            user_id : req.params["userId"],
+                            reward_id : req.params["rewardId"]
                         });
                 }
                 // User not yet attended in this reward -- INSERT new data

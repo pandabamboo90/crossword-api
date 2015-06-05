@@ -6,7 +6,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, fastCSV,
     router.post("/csv/:dataType", function(req,res){
 
         var busboyObj = new busboy({ headers: req.headers }),
-            dataType = req.param("dataType"),
+            dataType = req.params["dataType"],
             writePath = "";
 
         busboyObj.on("file", function(fieldname, file, filename, encoding, mimetype) {

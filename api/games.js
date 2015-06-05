@@ -114,7 +114,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
     router.get("/games/:gameId", function(req, res) {
         knex.select("*")
             .from("games_list_view")
-            .where("game_id", req.param("gameId"))
+            .where("game_id", req.params["gameId"])
             .then(function(_result){
                 var result = appFunction.convertQueryResultData(_result);
 
@@ -156,9 +156,9 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
         knex.transaction(function(trx){
                 return trx("games")
                     .update(updateNormalFields)
-                    .where("game_id", req.param("gameId"))
+                    .where("game_id", req.params["gameId"])
                     .then(function(){
-                        return trx.raw("update games set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where game_id = ?", req.param("gameId"));
+                        return trx.raw("update games set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where game_id = ?", req.params["gameId"]);
                     })
             })
             .then(function(updatedRow) {
@@ -215,7 +215,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
     
     router.get("/games/:gameId/ranking", function(req, res){
         var requestQuery = req.query,
-            gameId = req.param("gameId"),
+            gameId = req.params["gameId"],
             objSearchSQL = {},
             currentPage = requestQuery.currentPage ? parseInt(requestQuery.currentPage) : 1,
             result = {

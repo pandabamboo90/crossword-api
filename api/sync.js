@@ -8,7 +8,7 @@ module.exports = function(app, router, pool, _u, appFunction, globalSettings, em
      * ========================================================================= */
 
 //    router.post("/sync/:userId", function(req, res){
-//        var userId = req.param("userId"),
+//        var userId = req.params["userId"],
 //            requestBody = req.body,
 //            lastGameId = requestBody.maxGameId,
 //            requestParameters = {
@@ -263,7 +263,7 @@ module.exports = function(app, router, pool, _u, appFunction, globalSettings, em
 
 
     router.post("/sync/:userId", function(req, res){
-        var userId = req.param("userId"),
+        var userId = req.params["userId"],
             requestBody = req.body,
 //            lastGameId = requestBody.maxGameId,
             requestParameters = {
@@ -399,7 +399,7 @@ module.exports = function(app, router, pool, _u, appFunction, globalSettings, em
                     .where("user_id", userId)
                     .then(function(_row){
                         if(_u.size(updateDateFields) > 0)
-                            return trx.raw("update users set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where user_id = ?", req.param("userId"));
+                            return trx.raw("update users set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where user_id = ?", req.params["userId"]);
                     })
             })
 //            })

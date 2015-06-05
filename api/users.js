@@ -126,7 +126,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
         .get(function(req, res) {
         knex.select("*")
             .from("users_list_view")
-            .where("user_id", req.param("userId"))
+            .where("user_id", req.params["userId"])
             .then(function(_result){
                 var result = appFunction.convertQueryResultData(_result);
 
@@ -169,9 +169,9 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
         knex.transaction(function(trx){
             return trx("users")
                 .update(updateNormalFields)
-                .where("user_id", req.param("userId"))
+                .where("user_id", req.params["userId"])
                 .then(function(){
-                    return trx.raw("update users set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where user_id = ?", req.param("userId"));
+                    return trx.raw("update users set " + appFunction.prepareUpdateDateQuery(updateDateFields, req.user.deviceType) + " where user_id = ?", req.params["userId"]);
                 })
         })
         .then(function(_row) {
@@ -199,7 +199,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
     router.route("/users/:userId/ranking")
         .get(function(req, res){
         var requestQuery = req.query,
-            userId = req.param("userId"),
+            userId = req.params["userId"],
             objSearchSQL = {},
             currentPage = requestQuery.currentPage ? parseInt(requestQuery.currentPage) : 1,
             result = {
@@ -262,7 +262,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
     router.route("/users/:userId/rewards")
         .get(function (req, res) {
         var requestQuery = req.query,
-            userId = req.param("userId"),
+            userId = req.params["userId"],
             requestParameters = appFunction.convertRequestDataToUnderscore(requestQuery),
             objSearchSQL = appFunction.buildSQLSearchQuery(requestParameters),
             currentPage = requestQuery.currentPage ? parseInt(requestQuery.currentPage) : 1,
