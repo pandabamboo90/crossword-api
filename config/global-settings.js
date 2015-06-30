@@ -4,9 +4,9 @@ var rootFolder = path.dirname(require.main.filename);
 module.exports = {
     hostname                        : "http://dev.gumiviet.com:5000",
     rootFolder                      : rootFolder,
-    rewardThumbFolder               : "/uploads/reward-thumbnail/",
-    csvUploadFolder                 : "/uploads/csv/",
-    tmpFolder                       : "/uploads/tmp/",
+    rewardThumbFolder               : "/public/uploads/reward-thumbnail/",
+    csvUploadFolder                 : "/public/uploads/csv/",
+    tmpFolder                       : "/public/uploads/tmp/",
     MySQLDateFormat                 : "yyyy/MM/dd hh:mm:ss",
     MySQLDateFormatOnlyDate         : "yyyy/MM/dd",
     pagination : {
@@ -79,7 +79,7 @@ module.exports = {
         connection : {
             host     : "localhost",
             user     : "mysql-user",
-            password : "dangnguyen",
+            password : "mysql-user",
             database : "crossword"
         }
     }
