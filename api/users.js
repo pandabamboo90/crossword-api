@@ -113,7 +113,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
                 }
             })
             .catch(function(err){
-                res.send(400, { message : err.toString() });
+                res.status(400).send({ message : err.toString() });
             });
     });
 
@@ -133,7 +133,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
                 res.json(result);
             })
             .catch(function(err){
-                res.send(400, { message : err.toString() });
+                res.status(400).send({ message : err.toString() });
             });
     })
         .put(function(req, res){
@@ -187,7 +187,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
         .catch(function(err) {
             // If we get here, that means that neither the 'Old Books' catalogues insert,
             // nor any of the books inserts will have taken place.
-            res.send(400, { message : err.toString() });
+            res.status(400).send({ message : err.toString() });
         });
     });
 
@@ -250,7 +250,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
                 }
             })
             .catch(function(err){
-                res.send(400, { message : err.toString() });
+                res.status(400).send({ message : err.toString() });
             });
     });
 
@@ -306,7 +306,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, log){
                 }
             })
             .catch(function(err){
-                res.send(400, { message : err.toString() });
+                res.status(400).send({ message : err.toString() });
             });
     });
  };

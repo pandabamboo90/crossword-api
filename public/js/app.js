@@ -57,7 +57,7 @@ var app = angular.module("crossword-app", [
                     // Already logged in, check token session
                     var currentTime = new Date();
                     var expireTime = new Date(currentUser.exp * 1000);
-                    console.log(expireTime);
+
                     // Token expired -> Request a new one
                     if(currentTime.compareTo(expireTime) >= 0){
                         authServices.clearCurrentUser();

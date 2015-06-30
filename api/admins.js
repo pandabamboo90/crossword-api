@@ -15,7 +15,7 @@ module.exports = function(app, router, pool, _u, appFunction, globalSettings, em
             ne2Password = requestBody.confirmPassword;
 
         if(newPassword != ne2Password){
-            res.send(400, { message : globalSettings.errorMessage.newPasswordNotMatch });
+            res.status(400).send({ message : globalSettings.errorMessage.newPasswordNotMatch });
         }else{
             knex.select("*")
                 .from("admins")
@@ -44,7 +44,7 @@ module.exports = function(app, router, pool, _u, appFunction, globalSettings, em
                         })
                 })
                 .catch(function(err){
-                    res.send(400, { message : err.toString() });
+                    res.status(400).send({ message : err.toString() });
                 });
         }
     });

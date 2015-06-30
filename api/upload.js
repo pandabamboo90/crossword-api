@@ -25,7 +25,7 @@ module.exports = function(app, router, _u, appFunction, globalSettings, fastCSV,
                     console.log("file end")
                 })
             }else{
-                res.send(400, {
+                res.status(400).send({
                     type : "error",
                     message : "Failed to upload ! This not a CSV file."
                 });

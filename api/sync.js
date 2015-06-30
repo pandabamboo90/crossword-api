@@ -347,7 +347,7 @@ module.exports = function(app, router, pool, _u, appFunction, globalSettings, em
                         console.log("==== SYNC : SYNC GAME DATA FINISHED !");
                     })
                     .catch(function(err) {
-                        res.send(400, { message : err.toString() });
+                        res.status(400).send({ message : err.toString() });
                     });
                 });
         }
