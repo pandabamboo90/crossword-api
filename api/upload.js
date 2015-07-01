@@ -137,8 +137,8 @@ module.exports = function(app, router, _u, appFunction, globalSettings, fastCSV,
             // TODO : Accept only Image file !
             if(mimetype.indexOf("image") != -1){
                 pathToRewardsThumbnail = globalSettings.rewardThumbFolder + appFunction.getFullDateTime() + "_" + decodeURIComponent(filename);
-
-                file.pipe(fs.createWriteStream(globalSettings.rootFolder + pathToRewardsThumbnail));
+                var saveTo = globalSettings.rootFolder + pathToRewardsThumbnail;
+                file.pipe(fs.createWriteStream(saveTo));
             }else{
                 res.send(400, {
                     type : "error",
@@ -149,8 +149,6 @@ module.exports = function(app, router, _u, appFunction, globalSettings, fastCSV,
         busboyObj.on("finish", function() {
             var thumbnailUrl = req.headers.host + pathToRewardsThumbnail;
             thumbnailUrl = req.secure ? "https://" + thumbnailUrl : "http://" + thumbnailUrl;
-
-//            console.log(thumbnailUrl);
             res.json({
                 rewardThumb : thumbnailUrl
             });

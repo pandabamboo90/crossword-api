@@ -2,11 +2,11 @@ var path = require("path");
 var rootFolder = path.dirname(require.main.filename);
 
 module.exports = {
-    hostname                        : "http://dev.gumiviet.com:5000",
+    hostname                        : "http://192.168.1.86:5000",
     rootFolder                      : rootFolder,
-    rewardThumbFolder               : "/public/uploads/reward-thumbnail/",
-    csvUploadFolder                 : "/public/uploads/csv/",
-    tmpFolder                       : "/public/uploads/tmp/",
+    rewardThumbFolder               : "/uploads/reward-thumbnail/",
+    csvUploadFolder                 : "/uploads/csv/",
+    tmpFolder                       : "/uploads/tmp/",
     MySQLDateFormat                 : "yyyy/MM/dd hh:mm:ss",
     MySQLDateFormatOnlyDate         : "yyyy/MM/dd",
     pagination : {
